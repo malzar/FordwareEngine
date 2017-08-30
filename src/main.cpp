@@ -18,7 +18,7 @@
 using namespace std;
 using namespace glm;
 const GLint WIDTH = 800, HEIGHT = 600;
-const GLfloat NEAR = 0.1, FAR = 300.0;
+
 
 bool WIDEFRAME = false;
 bool PERSPECTIVE = true;
@@ -73,7 +73,6 @@ int main() {
 	glfwSetScrollCallback(window, MouseScroll);
 
 	glEnable(GL_DEPTH_TEST);
-	//glDepthFunc(GL_ALWAYS);
 	glEnable(GL_MULTISAMPLE);
 	glEnable(GL_CULL_FACE);
 	glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
@@ -90,8 +89,6 @@ int main() {
 
 	Shader* PhongShaderNoText = new Shader("./src/Shader/VertexShaderPhong.vs",
 										   "./src/Shader/FragmentShaderPhong.fs");
-	Shader* DepthShader = new Shader("./src/Shader/Depth.vs",
-									"./src/Shader/Depth.fs");
 
 	//objetos
 	Movilecubo = new Object(vec3(2.0f), vec3(0.0f), vec3(0.0f), Object::CUBE);
@@ -102,10 +99,8 @@ int main() {
 	Object * Lamp4 = new Object(vec3(0.1f), vec3(0.0f), vec3( -5.0f, 4.5f, 0.0f), Object::CUBE);
 
 	//materiales
-	Material * wall = new Material("./src/Materials/difuso.png", 
-									"./src/Materials/especular.png", 320.0f);
-	Material * white = new Material("./src/Materials/difusoWhite.png", 
-									"./src/Materials/difusoWhite.png", 200);
+	Material * wall = new Material("./src/Materials/difuso.png", "./src/Materials/especular.png", 320.0f);
+	Material * white = new Material("./src/Materials/difusoWhite.png", "./src/Materials/difusoWhite.png", 200);
 
 	//luces
 	Ldirec = new Light(vec3(0.0f),vec3(0.0f, -1.0f, 0.0f), vec3(0.1f), vec3(0.1f), vec3(0.1f), Light::DIRECTIONAL,-1);
@@ -140,22 +135,15 @@ int main() {
 
 		mat4 Mproject;
 		if (screenWidth>screenHeight)
-			Mproject = perspective(radians(cam->GetFOV()), (float) screenWidth / screenHeight, NEAR, FAR);
+			Mproject = perspective(radians(cam->GetFOV()), (float) screenWidth / screenHeight, 0.3f, 100.0f);
 		else
-			Mproject = perspective(radians(cam->GetFOV()), (float) screenHeight / screenWidth, NEAR, FAR);
+			Mproject = perspective(radians(cam->GetFOV()), (float) screenHeight / screenWidth, 0.3f, 100.0f);
 
 		//big cube
-		//---------------------Phong-----------------------------------//
-		//PhongShader->Use();
-		//PhongShader->SetMatrix(BigCube->GetModelMatrix(), cam->LookAt(), Mproject);
-		//white->ActivateTextures();
-		//white->SetMaterialTextured(PhongShader);
-		//---------------------Depth----------------------------------//
-		DepthShader->Use();
-		DepthShader->SetMatrix(BigCube->GetModelMatrix(), cam->LookAt(), Mproject);
-		DepthShader->SetDepth(NEAR, FAR);
+		PhongShader->Use();
+		PhongShader->SetMatrix(BigCube->GetModelMatrix(), cam->LookAt(), Mproject);
 		white->ActivateTextures();
-		white->SetMaterialTextured(DepthShader);
+		white->SetMaterialTextured(PhongShader);
 
 		//Ldirec->SetLight(PhongShaderNoText, cam->GetPosition());
 		//Plight1->SetLight(PhongShader, cam->GetPosition());
@@ -167,17 +155,11 @@ int main() {
 		BigCube->Draw();
 
 		//normal cube
-		//---------------------Phong-----------------------------------//
 		//PhongShader->Use();
-		//PhongShader->SetMatrix(Movilecubo->GetModelMatrix(), cam->LookAt(), Mproject);
-		//wall->ActivateTextures();
-		//wall->SetMaterialTextured(PhongShader);
-		//---------------------Depth----------------------------------//
-		DepthShader->Use();
-		DepthShader->SetMatrix(Movilecubo->GetModelMatrix(), cam->LookAt(), Mproject);
-		DepthShader->SetDepth(NEAR, FAR);
+		PhongShader->SetMatrix(Movilecubo->GetModelMatrix(), cam->LookAt(), Mproject);
+
 		wall->ActivateTextures(); 
-		wall->SetMaterialTextured(DepthShader);
+		wall->SetMaterialTextured(PhongShader);
 
 		Ldirec->SetLight(PhongShader, cam->GetPosition());
 		Plight1->SetLight(PhongShader, cam->GetPosition());
@@ -241,19 +223,19 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
 	}
 	state = glfwGetKey(window, GLFW_KEY_RIGHT); 
 	if (state == GLFW_PRESS) {
-		Movilecubo->Move(vec3(-0.05f, 0.f, 0.f)*10.0f);
+		Movilecubo->Move(vec3(-0.05f, 0.f, 0.f));
 	}
 	state = glfwGetKey(window, GLFW_KEY_LEFT); 
 	if (state == GLFW_PRESS) {
-		Movilecubo->Move(vec3(0.05f, 0.f, 0.f)*10.0f);
+		Movilecubo->Move(vec3(0.05f, 0.f, 0.f));
 	}
 	state = glfwGetKey(window, GLFW_KEY_UP);
 	if (state == GLFW_PRESS) {
-		Movilecubo->Move(vec3(0.f, 0.05f, 0.f)*10.0f);
+		Movilecubo->Move(vec3(0.f, 0.05f, 0.f));
 	}
 	state = glfwGetKey(window, GLFW_KEY_DOWN); 
 	if (state == GLFW_PRESS) {
-		Movilecubo->Move(vec3(0.f, -0.05f, 0.f)*10.0f);
+		Movilecubo->Move(vec3(0.f, -0.05f, 0.f));
 	}	
 	state = glfwGetKey(window, GLFW_KEY_KP_6);
 	if (state == GLFW_PRESS) {

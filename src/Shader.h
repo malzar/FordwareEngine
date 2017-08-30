@@ -20,7 +20,6 @@ public:
 	void Use();
 	void SetMatrix(mat4 ModelView, mat4 CameraView, mat4 ProjectionView);
 	void SetLightValues(vec3 LightPos, vec3 LightColor, vec3 CamPos, vec3 ObjectColor);
-	void SetDepth(float NearPlane, float FarPlane);
 };
 
 #endif

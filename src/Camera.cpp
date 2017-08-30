@@ -62,7 +62,7 @@ void Camera::DoMovement(GLFWwindow * window) {
 	int state;
 	state = glfwGetKey(window, GLFW_KEY_LEFT_SHIFT);
 	if (state == GLFW_PRESS) {
-		cameraSpeed *= 10.f;
+		cameraSpeed *= 4.f;
 	}
 
 	state = glfwGetKey(window, GLFW_KEY_W);

@@ -94,8 +94,3 @@ void Shader::SetLightValues(vec3 LightPos, vec3 LightColor, vec3 CamPos, vec3 Ob
 	glUniform3f(glGetUniformLocation(Program, "viewPos"), CamPos.x, CamPos.y, CamPos.z);
 	glUniform3f(glGetUniformLocation(Program, "objectColor"), ObjectColor.x, ObjectColor.y, ObjectColor.z);
 }
-
-void Shader::SetDepth(float NearPlane, float FarPlane) {
-	glUniform1f(glGetUniformLocation(Program, "Near"), NearPlane);
-	glUniform1f(glGetUniformLocation(Program, "Far"), FarPlane);
-}
