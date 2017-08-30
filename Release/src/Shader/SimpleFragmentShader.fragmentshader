@@ -1,0 +1,26 @@
+#version 330 core
+
+in vec3 editedVertex;
+out vec4 color;
+
+uniform float maxHeight;
+uniform float minHeight;
+uniform float maxWidth;
+uniform float normalWidth;
+
+void main(){
+
+		float green,red,blue;
+		blue = (editedVertex.y-minHeight)/(maxHeight-minHeight);
+		green =1.0f;
+		//red= 0;
+		if(abs (editedVertex.x)>=normalWidth){
+			red = (abs (editedVertex.x)-normalWidth)/(maxWidth-normalWidth);
+			green = 1.0f-red;
+		}
+		//red = myColor - green;
+		blue = blue-red;
+
+		color = vec4 (red,green,blue,1.0f);
+
+}
