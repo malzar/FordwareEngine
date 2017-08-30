@@ -1,3 +1,5 @@
+Go to "Realise" folder and open the .exe file.
+ 
 Camera movement:
  w
 asd - translation
